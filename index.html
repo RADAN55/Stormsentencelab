@@ -6,7 +6,7 @@
 <title>Storm Sentence Lab · EL Publishing</title>
 <meta name="description" content="Storm Sentence Lab — a run-on clinic, grammar lab, and instructional coach lab for English learners, grades 9–12. EL Publishing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231E2761'/%3E%3Cpath d='M12 40h40M12 40l8-8M12 40l8 8' stroke='%23C9A227' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='46' cy='24' r='6' fill='%23C9A227'/%3E%3C/svg%3E">
 <style>
 :root{
@@ -197,6 +197,24 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:30px 14px}
 
 @media print{.top,.nav,.btn,.audio,footer{display:none!important}main{padding:0}.card{box-shadow:none;break-inside:avoid}}
 @media (max-width:560px){h1{font-size:1.6rem}.nav{top:58px}.coach svg{width:70px;height:70px;flex-basis:70px}.w{font-size:.98rem;padding:7px 9px}}
+
+/* chalkboard */
+.board{background:#4a3421;padding:14px;border-radius:14px;box-shadow:var(--sh)}
+.slate{background:radial-gradient(ellipse at 30% 20%,#2f5d4c,#1f4638 70%);border-radius:6px;min-height:300px;padding:18px 20px 22px;color:#f3f1e7;font-family:'Patrick Hand','Comic Sans MS',cursive;font-size:1.55rem;line-height:1.35;position:relative;overflow:hidden}
+.slate:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.03) 0 3px,transparent 3px 14px);pointer-events:none}
+.slate .ttl{font-size:1.15rem;letter-spacing:.06em;color:#ffe9a6;border-bottom:2px dashed rgba(255,255,255,.35);padding-bottom:4px;margin-bottom:10px}
+.ln{display:block;margin:4px 0;white-space:pre-wrap}
+.ln.new{clip-path:inset(0 100% 0 0);animation:wr 1.2s steps(28) forwards}
+@keyframes wr{to{clip-path:inset(0 0 0 0)}}
+.ln.big{font-size:1.9rem}.ln.sm{font-size:1.2rem;color:#d7e6dd}
+.cy{color:#ffe36e}.cp{color:#ff9ec4}.cb{color:#8fd3ff}.cg{color:#a8f0a0}.cr{color:#ff8a7a}
+.ul{border-bottom:3px solid currentColor}.bx{border:2.5px solid #ffe36e;border-radius:8px;padding:0 6px}.st2{text-decoration:line-through;text-decoration-color:#ff8a7a;text-decoration-thickness:3px}
+.tray{height:12px;background:#6b4a2e;border-radius:0 0 8px 8px;margin-top:10px;position:relative}
+.tray:after{content:"";position:absolute;left:26px;top:-5px;width:46px;height:8px;background:#f3f1e7;border-radius:3px;box-shadow:60px 0 0 #ffe36e,104px 0 0 #ff9ec4}
+.bdctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.dots{display:flex;gap:6px;align-items:center}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}.dots i.on{background:var(--gold)}.dots i.done{background:var(--navy)}
+body.projector .slate{font-size:2.1rem;min-height:420px}body.projector .ln.big{font-size:2.6rem}
+@media (max-width:560px){.slate{font-size:1.3rem;padding:14px}.ln.big{font-size:1.55rem}}
 </style>
 </head>
 <body>
@@ -217,6 +235,7 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:30px 14px}
 
 <nav class="nav" id="nav">
   <button class="tab on" data-v="home"><span class="ic">🏠</span><span data-i="n_home">Start</span></button>
+  <button class="tab" data-v="board"><span class="ic">🧑‍🏫</span><span data-i="n_board">Coach Lessons</span></button>
   <button class="tab" data-v="clinic"><span class="ic">🩺</span><span data-i="n_clinic">Run-On Clinic</span></button>
   <button class="tab" data-v="grammar"><span class="ic">🧪</span><span data-i="n_grammar">Grammar Lab</span></button>
   <button class="tab" data-v="games"><span class="ic">🎮</span><span data-i="n_games">Games</span></button>
@@ -251,11 +270,20 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:30px 14px}
   </div>
 
   <div class="grid">
+    <div class="card gold" onclick="go('board')" style="cursor:pointer"><div class="kicker">★</div><h3>🧑‍🏫 <span data-i="n_board">Coach Lessons</span></h3><p class="mute" data-i="c0">Seven short lessons taught on the chalkboard. Start here if run-ons are new.</p></div>
     <div class="card" onclick="go('clinic')" style="cursor:pointer"><div class="kicker">01</div><h3>🩺 <span data-i="n_clinic">Run-On Clinic</span></h3><p class="mute" data-i="c1">Spot the seam, pick a fix, then check your own paragraph.</p></div>
     <div class="card" onclick="go('grammar')" style="cursor:pointer"><div class="kicker">02</div><h3>🧪 <span data-i="n_grammar">Grammar Lab</span></h3><p class="mute" data-i="c2">Six stations: subjects & verbs, clauses, FANBOYS, subordinators, semicolons, sentence triage.</p></div>
     <div class="card" onclick="go('games')" style="cursor:pointer"><div class="kicker">03</div><h3>🎮 <span data-i="n_games">Games</span></h3><p class="mute" data-i="c3">Sentence Surgery (60 seconds) and Combine-It Studio.</p></div>
     <div class="card" onclick="go('coach')" style="cursor:pointer"><div class="kicker">04</div><h3>🧭 <span data-i="n_coach">Coach Lab</span></h3><p class="mute" data-i="c4">For teachers: 10-minute mini-lessons, anchor chart, Level 3 → 4 models, class error log.</p></div>
   </div>
+</section>
+
+<!-- ============ CHALKBOARD ============ -->
+<section class="view" id="v-board">
+  <h2>🧑‍🏫 <span data-i="n_board">Coach Lessons</span></h2>
+  <p class="mute" data-i="bd_help">Coach Rivera teaches each lesson on the chalkboard. Press Play and watch the board, or step through at your own speed.</p>
+  <div class="chips" id="bd-chips"></div>
+  <div id="bd-wrap"></div>
 </section>
 
 <!-- ============ CLINIC ============ -->
@@ -412,7 +440,7 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:30px 14px}
 <script>
 /* ================= i18n ================= */
 const T={
-en:{brand:"Storm Sentence Lab",proj:"Projector",n_home:"Start",n_clinic:"Run-On Clinic",n_grammar:"Grammar Lab",n_games:"Games",n_daily:"Daily Dose",n_exit:"Exit Ticket",n_progress:"My Progress",n_coach:"Coach Lab",
+en:{brand:"Storm Sentence Lab",proj:"Projector",n_home:"Start",n_board:"Coach Lessons",bd_help:"Coach Rivera teaches each lesson on the chalkboard. Press Play and watch the board, or step through at your own speed.",c0:"Seven short lessons taught on the chalkboard. Start here if run-ons are new.",bd_play:"Play lesson",bd_pause:"Pause",bd_next:"Next",bd_back:"Back",bd_again:"Say it again",bd_restart:"Start over",bd_try:"Your turn: practice this",bd_nextl:"Next lesson",bd_step:"Step",n_clinic:"Run-On Clinic",n_grammar:"Grammar Lab",n_games:"Games",n_daily:"Daily Dose",n_exit:"Exit Ticket",n_progress:"My Progress",n_coach:"Coach Lab",
 h_kick:"Grades 9–12 · ELP Standard 10 · Clauses, punctuation & joining words",h_title:"One idea. One stop. No more run-ons.",h_sub:"A run-on happens when two complete ideas crash together without a stop. In this lab you learn to find the crash, choose a fix, and write sentences a reader can breathe through.",h_start:"Start the Clinic",h_daily:"Today's Daily Dose",
 lane_k:"Choose your lane",lane_help:"Newcomer = short, everyday sentences · Emerging = school sentences · Progressing = academic sentences · Challenge = transitions and tricky splices. You can change lanes any time.",
 c1:"Spot the seam, pick a fix, then check your own paragraph.",c2:"Six stations: subjects & verbs, clauses, FANBOYS, subordinators, semicolons, sentence triage.",c3:"Sentence Surgery (60 seconds) and Combine-It Studio.",c4:"For teachers: 10-minute mini-lessons, anchor chart, Level 3 → 4 models, class error log.",
@@ -441,7 +469,7 @@ saved:"Saved.",proj_on:"Projector mode on",proj_off:"Projector mode off",
 week:"Week",day:"Day",of:"of",score:"Score",
 b1:"First Fix",b1s:"Fixed your first run-on",b2:"Seam Spotter",b2s:"10 seams found",b3:"Sentence Surgeon",b3s:"Scored 12+ in Surgery",b4:"Station Master",b4s:"All 6 stations lit",b5:"Combiner",b5s:"5 sentences combined",b6:"Daily Habit",b6s:"5-day streak",
 st_total:"Fixes made",st_seams:"Seams found",st_best:"Best Surgery",st_stations:"Stations lit"},
-es:{brand:"Storm Sentence Lab",proj:"Proyector",n_home:"Inicio",n_clinic:"Clínica de oraciones",n_grammar:"Laboratorio de gramática",n_games:"Juegos",n_daily:"Dosis diaria",n_exit:"Boleto de salida",n_progress:"Mi progreso",n_coach:"Laboratorio del coach",
+es:{brand:"Storm Sentence Lab",proj:"Proyector",n_home:"Inicio",n_board:"Lecciones del coach",bd_help:"La Coach Rivera enseña cada lección en el pizarrón. Presiona Reproducir y mira el pizarrón, o avanza paso a paso a tu ritmo.",c0:"Siete lecciones cortas enseñadas en el pizarrón. Empieza aquí si los run-ons son nuevos para ti.",bd_play:"Reproducir lección",bd_pause:"Pausa",bd_next:"Siguiente",bd_back:"Atrás",bd_again:"Dilo otra vez",bd_restart:"Empezar de nuevo",bd_try:"Tu turno: practica esto",bd_nextl:"Siguiente lección",bd_step:"Paso",n_clinic:"Clínica de oraciones",n_grammar:"Laboratorio de gramática",n_games:"Juegos",n_daily:"Dosis diaria",n_exit:"Boleto de salida",n_progress:"Mi progreso",n_coach:"Laboratorio del coach",
 h_kick:"Grados 9–12 · Estándar ELP 10 · Cláusulas, puntuación y palabras de enlace",h_title:"Una idea. Una parada. Sin oraciones interminables.",h_sub:"Una oración interminable (run-on) ocurre cuando dos ideas completas choca sin una parada. En este laboratorio aprendes a encontrar el choque, elegir un arreglo y escribir oraciones que el lector pueda respirar.",h_start:"Entrar a la clínica",h_daily:"Dosis de hoy",
 lane_k:"Elige tu carril",lane_help:"Newcomer = oraciones cortas de la vida diaria · Emerging = oraciones escolares · Progressing = oraciones académicas · Challenge = transiciones y empalmes difíciles. Puedes cambiar de carril cuando quieras.",
 c1:"Encuentra la costura, elige un arreglo y revisa tu propio párrafo.",c2:"Seis estaciones: sujetos y verbos, cláusulas, FANBOYS, subordinantes, punto y coma, triaje de oraciones.",c3:"Cirugía de oraciones (60 segundos) y Estudio Combínalo.",c4:"Para maestros: minilecciones de 10 minutos, cartel ancla, modelos de Nivel 3 → 4, registro de errores.",
@@ -501,7 +529,7 @@ function voicesFor(lang){if(!VOICES.length)loadVoices();const pref=VOICES.filter
   const local=pref.filter(v=>v.localService),remote=pref.filter(v=>!v.localService);
   local.sort((x,y)=>(y.default?1:0)-(x.default?1:0));return local.concat(remote)}
 function setStatus(el,msg){const st=el?el.querySelector('.st'):null;if(st)st.textContent=msg;else if(msg)toast(msg)}
-function speakText(text,lang,el){
+function speakText(text,lang,el,cb){
   if(!('speechSynthesis' in window)){setStatus(el,LANG==='es'?'Este dispositivo no tiene voz.':'This device has no speech voice.');return}
   text=(text||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();if(!text)return;
   const synth=speechSynthesis,run=++speakRun,code=lang==='es'?'es-US':'en-US';
@@ -512,7 +540,7 @@ function speakText(text,lang,el){
   const cands=voicesFor(lang);            // local voices first, then network voices
   const plan=[cands[0]||null,null,cands[1]||null].filter((v,i,a)=>a.indexOf(v)===i); // try: best local voice, device default, next voice
   let attempt=0,started=false;
-  const done=()=>{if(run!==speakRun)return;clearInterval(keepAlive);if(el)el.classList.remove('talking')};
+  const done=()=>{if(run!==speakRun)return;clearInterval(keepAlive);if(el)el.classList.remove('talking');if(cb)cb()};
   const queue=v=>{chunks.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c);u.lang=v?v.lang:code;if(v)u.voice=v;u.rate=lang==='es'?.95:.92;u.volume=1;u.pitch=1;
       u.onstart=()=>{if(run!==speakRun)return;started=true;setStatus(el,'')};
       if(i===chunks.length-1)u.onend=done;
@@ -907,12 +935,80 @@ function renderAnchor(){document.getElementById('anchor').innerHTML=`<div class=
 <p style="text-align:center;margin-top:12px"><b>✗</b> The bus was late<span class="ro">,</span> I missed class. &nbsp;→&nbsp; ${LANG==='es'?'una coma sola NUNCA es una parada.':'a comma alone is NEVER a stop.'}</p>`}
 function saveSettings(){S.set('settings',{start:document.getElementById('set-start').value||'2026-08-03',form:document.getElementById('set-form').value.trim()});toast(t('saved'));renderDaily();renderExit()}
 
+
+/* ================= CHALKBOARD LESSONS ================= */
+const I1='<span class="cb">The bus was late</span>',I2='<span class="cp">I missed class</span>';
+const BOARD=[
+{en:"What is a run-on?",es:"¿Qué es un run-on?",to:"clinic",steps:[
+ {b:['<span class="ln big"><span class="cy">RUN-ON</span> = 2 complete ideas + 0 stops</span>'],en:"A run-on sentence is two complete ideas with no stop between them.",es:"Un run-on son dos ideas completas sin ninguna parada entre ellas."},
+ {b:['<span class="ln">The bus was late I missed class.</span>'],en:"Look at this sentence. The bus was late I missed class. Read it out loud. Your voice wants to stop in the middle.",es:"Mira esta oración. Léela en voz alta. Tu voz quiere parar a la mitad."},
+ {b:['<span class="ln">'+I1+'  +  '+I2+'</span>','<span class="ln sm">idea 1 (blue)      idea 2 (pink)</span>'],en:"There are two ideas here. Idea one, in blue: The bus was late. Idea two, in pink: I missed class. Each one can stand alone.",es:"Aquí hay dos ideas. La idea uno, en azul. La idea dos, en rosa. Cada una puede estar sola."},
+ {b:['<span class="ln"><span class="cr">✗</span> The bus was late<span class="cr bx">,</span> I missed class.</span>','<span class="ln sm">a comma alone = <span class="cr">comma splice</span></span>'],en:"A comma alone does not fix it. This is called a comma splice. A comma is too weak to hold two complete ideas apart.",es:"Una coma sola no lo arregla. Esto se llama empalme de coma. La coma es muy débil para separar dos ideas completas."},
+ {b:['<span class="ln sm">I ran I fell. <span class="cr">✗ short, but a run-on</span></span>'],en:"A run-on is not about length. I ran I fell is only four words, and it is still a run-on.",es:"Un run-on no depende del largo. I ran I fell tiene solo cuatro palabras y sigue siendo un run-on."},
+ {b:['<span class="ln big cy">One idea. One stop.</span>'],en:"Remember the rule. One idea, one stop. In the next lessons I will show you four ways to add the stop.",es:"Recuerda la regla. Una idea, una parada. En las siguientes lecciones te enseño cuatro maneras de poner la parada."}]},
+{en:"Find the seam",es:"Encuentra la costura",to:"clinic",steps:[
+ {b:['<span class="ln big">Every idea has:  <span class="cy">WHO / WHAT</span> + <span class="cg">DOES / IS</span></span>'],en:"Every complete idea has two parts. A who or what, and a does or is. We call them the subject and the verb.",es:"Cada idea completa tiene dos partes. Un quién o qué, y un hace o es. Se llaman sujeto y verbo."},
+ {b:['<span class="ln"><span class="cy ul">The bus</span> <span class="cg ul">was</span> late</span>'],en:"Who or what? The bus. Does or is? Was. That is one complete idea.",es:"¿Quién o qué? The bus. ¿Hace o es? Was. Esa es una idea completa."},
+ {b:['<span class="ln"><span class="cy ul">I</span> <span class="cg ul">missed</span> class</span>'],en:"Who or what? I. Does or is? Missed. That is a second complete idea.",es:"¿Quién o qué? I. ¿Hace o es? Missed. Esa es una segunda idea completa."},
+ {b:['<span class="ln big">The bus was late <span class="cr">/</span> I missed class</span>','<span class="ln sm">the <span class="cr">seam</span> is right before the second WHO</span>'],en:"The seam is the place where the first idea ends and the second one begins. Draw a slash there. The seam is right before the second who.",es:"La costura es el lugar donde termina la primera idea y empieza la segunda. Dibuja una barra ahí, justo antes del segundo quién."},
+ {b:['<span class="ln sm cy">Test: cover one side. Can the other side stand alone? Yes + Yes = two ideas.</span>'],en:"Here is the test. Cover one side with your hand. Can the other side stand alone? If both sides can, you found the seam.",es:"Esta es la prueba. Tapa un lado con la mano. ¿El otro lado puede estar solo? Si los dos pueden, encontraste la costura."}]},
+{en:"Fix 1: the period",es:"Arreglo 1: el punto",to:"clinic",steps:[
+ {b:['<span class="ln sm">The bus was late <span class="cr">/</span> I missed class</span>'],en:"We found the seam. Now we fix it. The first fix is the easiest one.",es:"Ya encontramos la costura. Ahora la arreglamos. El primer arreglo es el más fácil."},
+ {b:['<span class="ln big">The bus was late<span class="cy bx">.</span> <span class="cy ul">I</span> missed class.</span>'],en:"Put a period at the seam. Then start the second idea with a capital letter. Now you have two sentences.",es:"Pon un punto en la costura. Luego empieza la segunda idea con mayúscula. Ahora tienes dos oraciones."},
+ {b:['<span class="ln sm">It was cold<span class="cy">.</span> <span class="cy">W</span>e stayed inside.</span>'],en:"One more. It was cold. We stayed inside. Period, then capital W.",es:"Otra más. Punto, y luego W mayúscula."},
+ {b:['<span class="ln sm cg">✓ always correct</span>','<span class="ln sm cr">! too many short sentences sound choppy</span>'],en:"The period is always correct. But if you use it every time, your writing sounds choppy. So we need more tools.",es:"El punto siempre es correcto. Pero si lo usas siempre, tu escritura suena cortada. Por eso necesitamos más herramientas."}]},
+{en:"Fix 2: comma + FANBOYS",es:"Arreglo 2: coma + FANBOYS",to:"clinic",steps:[
+ {b:['<span class="ln big"><span class="cy">F</span>or <span class="cy">A</span>nd <span class="cy">N</span>or <span class="cy">B</span>ut <span class="cy">O</span>r <span class="cy">Y</span>et <span class="cy">S</span>o</span>'],en:"These seven small words are called FANBOYS. For, and, nor, but, or, yet, so. They join two complete ideas.",es:"Estas siete palabras pequeñas se llaman FANBOYS. Unen dos ideas completas."},
+ {b:['<span class="ln">The bus was late<span class="cy bx">, so</span> I missed class.</span>'],en:"Put a comma, then the FANBOYS word. The bus was late, comma, so I missed class. The comma goes before the word, never after.",es:"Pon una coma y luego la palabra FANBOYS. La coma va antes de la palabra, nunca después."},
+ {b:['<span class="ln sm"><span class="cy">so</span> = result     <span class="cp">but / yet</span> = contrast     <span class="cb">and</span> = one more fact</span>'],en:"Choose the word that shows the relationship. So shows a result. But and yet show contrast. And adds one more fact.",es:"Elige la palabra que muestra la relación. So es resultado. But y yet son contraste. And agrega un dato más."},
+ {b:['<span class="ln">She studied hard<span class="cp bx">, but</span> she felt nervous.</span>'],en:"She studied hard, but she felt nervous. That is a contrast, so we use but.",es:"Eso es un contraste, así que usamos but."},
+ {b:['<span class="ln sm"><span class="cr">✗</span> I was late so, I ran.     <span class="cg">✓</span> I was late, so I ran.</span>'],en:"Watch the comma. It comes before so. Comma plus FANBOYS. Say it with me: comma plus FANBOYS.",es:"Cuidado con la coma. Va antes de so. Coma más FANBOYS. Dilo conmigo."}]},
+{en:"Fix 3: the semicolon",es:"Arreglo 3: el punto y coma",to:"clinic",steps:[
+ {b:['<span class="ln big"><span class="cy">;</span>  = a half stop</span>'],en:"This is a semicolon. Think of it as a half stop. It is stronger than a comma and softer than a period.",es:"Este es el punto y coma. Piensa en él como media parada. Es más fuerte que la coma y más suave que el punto."},
+ {b:['<span class="ln">The bus was late<span class="cy bx">;</span> <span class="cy ul">I</span> missed class.</span>','<span class="ln">It was cold<span class="cy bx">;</span> <span class="cy ul">w</span>e stayed inside.</span>'],en:"Put the semicolon at the seam. The next word stays lowercase, unless it is a name or the word I. Use it when the two ideas are very close.",es:"Pon el punto y coma en la costura. La siguiente palabra va en minúscula, a menos que sea un nombre o la palabra I."},
+ {b:['<span class="ln sm"><span class="cr">✗</span> The test was hard<span class="cr">,</span> however<span class="cr">,</span> I passed.</span>'],en:"Now the trap. However is not a FANBOYS word. Two commas around however make a run-on.",es:"Ahora la trampa. However no es una palabra FANBOYS. Dos comas alrededor de however forman un run-on."},
+ {b:['<span class="ln"><span class="cg">✓</span> The test was hard<span class="cy bx">;</span> however<span class="cy">,</span> I passed.</span>','<span class="ln sm">same for: therefore, in fact, as a result</span>'],en:"Put a semicolon before however and a comma after it. The same rule works for therefore, in fact, and as a result.",es:"Pon punto y coma antes de however y coma después. La misma regla sirve para therefore, in fact y as a result."}]},
+{en:"Fix 4: the subordinator",es:"Arreglo 4: el subordinante",to:"clinic",steps:[
+ {b:['<span class="ln"><span class="cy">because   when   although   if   since   after   while</span></span>'],en:"These words are subordinators. Because, when, although, if, since, after, while. They turn one idea into a reason, a time, or a condition.",es:"Estas palabras son subordinantes. Convierten una idea en una razón, un tiempo o una condición."},
+ {b:['<span class="ln"><span class="cy ul">Because</span> the bus was late<span class="cy bx">,</span> I missed class.</span>','<span class="ln sm">front = comma</span>'],en:"Put the subordinator at the front. Because the bus was late, comma, I missed class. When the subordinator is in front, you need a comma.",es:"Pon el subordinante al frente. Cuando el subordinante va al frente, necesitas una coma."},
+ {b:['<span class="ln">I missed class <span class="cy ul">because</span> the bus was late.</span>','<span class="ln sm">back = no comma</span>'],en:"Or put it in the middle. I missed class because the bus was late. In the middle, no comma.",es:"O ponlo en medio. En medio, sin coma."},
+ {b:['<span class="ln sm"><span class="cr">✗</span> Because the bus was late.   <span class="cr">fragment: the reader is waiting</span></span>'],en:"Be careful. Because the bus was late, period, is not finished. The reader is still waiting. That is a fragment.",es:"Cuidado. Because the bus was late, punto, no está terminada. El lector sigue esperando. Eso es un fragmento."},
+ {b:['<span class="ln"><span class="cp ul">Although</span> she studied hard<span class="cy">,</span> she felt nervous.</span>'],en:"Although shows contrast. Although she studied hard, she felt nervous. This kind of sentence is what a Level 4 writer sounds like.",es:"Although muestra contraste. Así suena un escritor de Nivel 4."}]},
+{en:"Which fix should I choose?",es:"¿Qué arreglo elijo?",to:"games",steps:[
+ {b:['<span class="ln big cy">Ask: how are the two ideas related?</span>'],en:"You know four fixes. Which one should you choose? Ask one question. How are the two ideas related?",es:"Ya sabes cuatro arreglos. ¿Cuál eliges? Haz una pregunta. ¿Cómo se relacionan las dos ideas?"},
+ {b:['<span class="ln">result  →  <span class="cy">, so</span>   or   <span class="cy">Because …,</span></span>'],en:"If one idea causes the other, use comma so, or use because.",es:"Si una idea causa la otra, usa coma so, o usa because."},
+ {b:['<span class="ln">contrast  →  <span class="cp">, but</span>   or   <span class="cp">Although …,</span></span>'],en:"If the ideas go against each other, use comma but, or use although.",es:"Si las ideas se oponen, usa coma but, o usa although."},
+ {b:['<span class="ln">two close facts  →  <span class="cb">;</span>   or   <span class="cb">, and</span></span>','<span class="ln">not sure  →  <span class="cg">.</span></span>'],en:"If they are just two close facts, use a semicolon or comma and. And if you are not sure, the period is always safe.",es:"Si son solo dos datos cercanos, usa punto y coma o coma and. Y si no estás seguro, el punto siempre es seguro."},
+ {b:['<span class="ln sm cy">Level 4 writers use more than one kind of fix in a paragraph.</span>'],en:"One last tip. Strong writers do not use the same fix every time. Mix them. Now go to the games and try Combine It.",es:"Un último consejo. Los buenos escritores no usan el mismo arreglo siempre. Mézclalos. Ahora ve a los juegos y prueba Combínalo."}]}
+];
+let bdL=0,bdS=0,bdPlaying=false,bdTimer=null;
+function renderBoard(animate){const box=document.getElementById('bd-wrap');if(!box)return;const L=BOARD[bdL],t0=T[LANG];
+  document.getElementById('bd-chips').innerHTML=BOARD.map((l,i)=>`<button class="chip ${i===bdL?'on':''}" onclick="bdPick(${i})">${i+1}. ${LANG==='es'?l.es:l.en}</button>`).join('');
+  const st=L.steps[bdS];
+  const lines=L.steps.slice(0,bdS+1).map((x,i)=>x.b.map(h=>(i===bdS&&animate)?h.replace('class="ln','class="ln new'):h).join('')).join('');
+  const last=bdS===L.steps.length-1;
+  box.innerHTML=`<div class="board"><div class="slate" aria-live="polite"><div class="ttl">${bdL+1}. ${L.en}${LANG==='es'?' · '+L.es:''}</div>${lines}</div><div class="tray"></div></div>
+  <div class="card" style="margin-top:12px"><div class="coach" id="bd-coach">${coachSVG('rivera')}<div class="bubble"><div class="name">${COACH.rivera.name} · ${t0.bd_step} ${bdS+1} / ${L.steps.length}</div><div class="txt">${bi(st.en,st.es)}</div>
+   <div class="audio"><button class="btn sm ghost" onclick="bdSay('en')">🔊 ${t0.bd_again}</button>${LANG==='es'?`<button class="btn sm ghost" onclick="bdSay('es')">🔊 ES</button>`:''}<span class="st"></span></div></div></div>
+   <div class="bdctl"><button class="btn gold" onclick="bdToggle()">${bdPlaying?'⏸ '+t0.bd_pause:'▶ '+t0.bd_play}</button><button class="btn ghost" onclick="bdStep(-1)" ${bdS===0?'disabled':''}>← ${t0.bd_back}</button><button class="btn" onclick="bdStep(1)" ${last?'disabled':''}>${t0.bd_next} →</button><button class="btn ghost sm" onclick="bdPick(${bdL})">↺ ${t0.bd_restart}</button>
+   <span class="sp"></span><span class="dots">${L.steps.map((_,i)=>`<i class="${i<bdS?'done':i===bdS?'on':''}"></i>`).join('')}</span></div>
+   ${last?`<div class="row" style="margin-top:12px"><button class="btn gold" onclick="go('${L.to}')">✏️ ${t0.bd_try}</button>${bdL<BOARD.length-1?`<button class="btn ghost" onclick="bdPick(${bdL+1})">${t0.bd_nextl} →</button>`:''}</div>`:''}</div>`}
+function bdHalt(){bdPlaying=false;clearTimeout(bdTimer);stopSpeech()}
+function bdPick(i){bdHalt();bdL=i;bdS=0;renderBoard(true)}
+function bdStep(d){bdHalt();const n=BOARD[bdL].steps.length;bdS=Math.max(0,Math.min(n-1,bdS+d));renderBoard(d>0);bdSay('en')}
+function bdSay(lang,cb){const st=BOARD[bdL].steps[bdS];speakText(lang==='es'?st.es:st.en,lang,document.getElementById('bd-coach'),cb)}
+function bdToggle(){if(bdPlaying){bdHalt();renderBoard(false);return}
+  if(bdS===BOARD[bdL].steps.length-1)bdS=0;bdPlaying=true;renderBoard(true);bdRun()}
+function bdRun(){if(!bdPlaying)return;bdSay('en',()=>{if(!bdPlaying)return;
+  if(bdS<BOARD[bdL].steps.length-1){bdTimer=setTimeout(()=>{if(!bdPlaying)return;bdS++;renderBoard(true);bdRun()},900)}
+  else{bdPlaying=false;renderBoard(false);toast('🏅')}})}
+
 /* ================= nav & boot ================= */
 function go(v){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
-  stopSpeech();if(v==='progress')renderProgress();if(v==='coach')renderErr();if(v==='daily')renderDaily();if(v==='exit')renderExit();window.scrollTo({top:0,behavior:'smooth'})}
+  bdPlaying=false;clearTimeout(bdTimer);stopSpeech();if(v==='board')renderBoard(true);if(v==='progress')renderProgress();if(v==='coach')renderErr();if(v==='daily')renderDaily();if(v==='exit')renderExit();window.scrollTo({top:0,behavior:'smooth'})}
 document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)go(b.dataset.v)});
 function toggleProj(){const on=document.body.classList.toggle('projector');document.getElementById('proj').classList.toggle('on',on);toast(on?t('proj_on'):t('proj_off'))}
-function renderAll(){renderLanes();renderFour();renderSeam();renderFix();renderStations();renderCombine();renderDaily();renderExit();renderProgress();renderMini();renderModels();renderErr();renderAnchor();
+function renderAll(){renderLanes();renderFour();renderSeam();renderFix();renderStations();renderCombine();renderDaily();renderExit();renderProgress();renderMini();renderModels();renderErr();renderAnchor();if(!bdPlaying)renderBoard(false);
   renderCoach('coach-home','rivera','Welcome to the Sentence Lab. I am Coach Rivera. A run-on is not a bad idea — it is two good ideas that need a stop between them. Pick your lane, find the seam, choose a fix, and read it aloud. Tap EN or ES at the top any time to see directions in Spanish.','Bienvenido al laboratorio. Soy la Coach Rivera. Un run-on no es una mala idea — son dos buenas ideas que necesitan una parada. Elige tu carril, encuentra la costura, elige un arreglo y léelo en voz alta. Toca EN o ES arriba para cambiar el idioma de las instrucciones.');
   renderCoach('coach-clinic','rivera','Here is the routine: first find the seam, the exact word where the second idea begins. Then choose one of the four fixes. Say the fixed sentence out loud. If your voice can stop or pause where the punctuation is, you did it right.','La rutina: primero encuentra la costura, la palabra exacta donde empieza la segunda idea. Luego elige uno de los cuatro arreglos. Di la oración arreglada en voz alta. Si tu voz puede parar donde está la puntuación, lo hiciste bien.');
   renderCoach('coach-teacher','hale','Coach Hale here. Run-ons are not a punctuation problem; they are a clause-awareness problem. Teach students to hear two ideas before you teach them where the comma goes. Each mini-lesson below takes ten minutes and ends with a check you can score in one glance. Watch the error log: when FANBOYS misses drop and semicolon misses rise, your class has moved from Level 3 to Level 4 territory.','Soy el Coach Hale. Los run-ons no son un problema de puntuación; son un problema de conciencia de cláusula. Enseña a oír dos ideas antes de enseñar dónde va la coma. Cada minilección dura diez minutos y termina con un chequeo rápido.');

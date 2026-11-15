@@ -8,6 +8,7 @@ A single-file platform that teaches English learners to stop writing run-on sent
 
 | Tab | For | What it does |
 |---|---|---|
+| **Coach Lessons** | Students, whole class | Seven lessons taught step by step on a chalkboard by Coach Rivera: what a run-on is, finding the seam, the four fixes, and choosing a fix. Autoplay or step through; captions in English and Spanish |
 | **Run-On Clinic** | Students | Spot the Seam (tap where the 2nd idea begins) · Fix It (period / comma + FANBOYS / semicolon / subordinator, with relationship checks) · Paragraph Checker (paste your own writing; flags likely run-ons and comma splices) · One-breath test |
 | **Grammar Lab** | Students | Six stations with a coach lesson + 8 one-chance questions each: Subjects & Verbs · Independent vs. Dependent · Comma + FANBOYS · Subordinators · Semicolons & Transitions · Sentence Triage |
 | **Games** | Students | Sentence Surgery (60-second seam hunt) · Combine-It Studio (join two sentences; splice and fused detection) |
