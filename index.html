@@ -493,35 +493,45 @@ let LANE=S.get('lane','E');
 function renderLanes(){document.querySelectorAll('.lanes').forEach(box=>{box.innerHTML=LANES.map(([k,n])=>`<button class="lane ${LANE===k?'on':''}" data-l="${k}" onclick="setLane('${k}')">${n}</button>`).join('')})}
 function setLane(k){LANE=k;S.set('lane',k);renderLanes();seamIdx=0;fixIdx=0;renderSeam();renderFix();renderCombine();}
 
-/* ================= speech (phone-safe) ================= */
-let speakingEl=null,VOICES=[];
+/* ================= speech (phone + Chromebook) ================= */
+let speakingEl=null,VOICES=[],speakRun=0,keepAlive=null;
 function loadVoices(){try{VOICES=speechSynthesis.getVoices()||[]}catch(e){VOICES=[]}}
-if('speechSynthesis' in window){loadVoices();try{speechSynthesis.onvoiceschanged=loadVoices}catch(e){}}
-function pickVoice(lang){if(!VOICES.length)loadVoices();const pref=VOICES.filter(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith(lang));if(!pref.length)return null;return pref.find(v=>v.localService&&v.default)||pref.find(v=>v.localService)||pref[0]}
+if('speechSynthesis' in window){loadVoices();try{speechSynthesis.addEventListener('voiceschanged',loadVoices)}catch(e){try{speechSynthesis.onvoiceschanged=loadVoices}catch(_){}}}
+function voicesFor(lang){if(!VOICES.length)loadVoices();const pref=VOICES.filter(v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith(lang));
+  const local=pref.filter(v=>v.localService),remote=pref.filter(v=>!v.localService);
+  local.sort((x,y)=>(y.default?1:0)-(x.default?1:0));return local.concat(remote)}
 function setStatus(el,msg){const st=el?el.querySelector('.st'):null;if(st)st.textContent=msg;else if(msg)toast(msg)}
 function speakText(text,lang,el){
   if(!('speechSynthesis' in window)){setStatus(el,LANG==='es'?'Este dispositivo no tiene voz.':'This device has no speech voice.');return}
   text=(text||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();if(!text)return;
+  const synth=speechSynthesis,run=++speakRun,code=lang==='es'?'es-US':'en-US';
+  const chunks=(text.match(/[^.!?;:]+[.!?;:]?/g)||[text]).map(c=>c.trim()).filter(Boolean);
   if(speakingEl)speakingEl.classList.remove('talking');
-  try{speechSynthesis.cancel()}catch(e){}
-  const code=lang==='es'?'es-US':'en-US';
-  const chunks=text.match(/[^.!?;:]+[.!?;:]?/g)||[text];
-  const v=pickVoice(lang);
   if(el){el.classList.add('talking');speakingEl=el}
   setStatus(el,'🔊 …');
-  let started=false;
-  const queue=()=>{chunks.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c.trim());u.lang=code;if(v)u.voice=v;u.rate=lang==='es'?.95:.92;u.volume=1;
-    u.onstart=()=>{started=true;setStatus(el,'')};
-    if(i===chunks.length-1)u.onend=()=>{if(el)el.classList.remove('talking')};
-    u.onerror=(ev)=>{if(el)el.classList.remove('talking');if(ev&&ev.error!=='interrupted'&&ev.error!=='canceled')setStatus(el,(LANG==='es'?'Error de audio: ':'Audio error: ')+(ev.error||''))};
-    try{speechSynthesis.speak(u)}catch(e){}})};
-  queue(); // synchronously, inside the tap — required on phones
-  // Chrome sometimes drops speech queued right after cancel(); retry once
-  setTimeout(()=>{if(!started&&!speechSynthesis.speaking&&!speechSynthesis.pending){try{speechSynthesis.cancel()}catch(e){}queue()}},350);
-  setTimeout(()=>{if(!started&&!speechSynthesis.speaking){if(el)el.classList.remove('talking');
-    setStatus(el,LANG==='es'?'El audio está bloqueado aquí. Sube el volumen y toca otra vez, o abre la versión del sitio web.':'Audio is blocked here. Turn the volume up and tap again, or open the website version.')}},2500);
+  const cands=voicesFor(lang);            // local voices first, then network voices
+  const plan=[cands[0]||null,null,cands[1]||null].filter((v,i,a)=>a.indexOf(v)===i); // try: best local voice, device default, next voice
+  let attempt=0,started=false;
+  const done=()=>{if(run!==speakRun)return;clearInterval(keepAlive);if(el)el.classList.remove('talking')};
+  const queue=v=>{chunks.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c);u.lang=v?v.lang:code;if(v)u.voice=v;u.rate=lang==='es'?.95:.92;u.volume=1;u.pitch=1;
+      u.onstart=()=>{if(run!==speakRun)return;started=true;setStatus(el,'')};
+      if(i===chunks.length-1)u.onend=done;
+      u.onerror=ev=>{if(run!==speakRun)return;if(ev&&(ev.error==='interrupted'||ev.error==='canceled'))return;setStatus(el,(LANG==='es'?'Error de audio: ':'Audio error: ')+((ev&&ev.error)||''))};
+      (window._utt=window._utt||[]).push(u);if(window._utt.length>40)window._utt.shift(); // keep a reference so Chrome does not drop the utterance
+      try{synth.speak(u)}catch(e){}});
+    try{synth.resume()}catch(e){}};
+  const go=()=>{if(run!==speakRun)return;queue(plan[attempt]);
+    clearInterval(keepAlive);keepAlive=setInterval(()=>{if(run!==speakRun||!synth.speaking){clearInterval(keepAlive);return}try{synth.pause();synth.resume()}catch(e){}},10000); // Chrome stops long speech after ~15 s
+    setTimeout(()=>{if(run!==speakRun||started)return;            // nothing came out: try the next voice
+      attempt++;try{synth.cancel()}catch(e){}
+      if(attempt<plan.length){setTimeout(go,250)}
+      else{done();setStatus(el,LANG==='es'?'No salió audio. Revise el volumen del Chromebook y que no esté en silencio; luego toque Probar audio.':'No audio came out. Check the Chromebook volume and mute key, then tap Test audio.')}
+    },1800)};
+  // Chrome (and Chromebooks) silently drop speech queued right after cancel(), so only cancel when something is playing, and then wait before speaking.
+  if(synth.speaking||synth.pending){try{synth.cancel()}catch(e){}setTimeout(go,250)}
+  else{go()}                                // nothing playing: speak inside the tap, as phones require
 }
-function stopSpeech(){try{speechSynthesis.cancel()}catch(e){}if(speakingEl)speakingEl.classList.remove('talking')}
+function stopSpeech(){speakRun++;clearInterval(keepAlive);try{if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel()}catch(e){}if(speakingEl)speakingEl.classList.remove('talking')}
 function testAudio(el){speakText(LANG==='es'?'Prueba de audio. Uno, dos, tres.':'Audio test. One, two, three.',LANG,el)}
 
 /* ================= coaches (original SVG) ================= */
