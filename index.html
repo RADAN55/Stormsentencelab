@@ -544,7 +544,7 @@ function coachSVG(kind){
 const COACH={rivera:{name:'Coach Rivera · EL Language Coach'},hale:{name:'Coach Hale · Instructional Coach'}};
 function renderCoach(id,kind,en,es){const box=document.getElementById(id);if(!box)return;
   box.innerHTML=`${coachSVG(kind)}<div class="bubble"><div class="name">${COACH[kind].name}</div><div class="txt">${bi(en,es)}</div>
-  <div class="audio"><button class="btn sm gold" onclick="speakText(${JSON.stringify(en)},'en',this.closest('.coach'))">🔊 ${t('listen')} EN</button>${es?`<button class="btn sm ghost" onclick="speakText(${JSON.stringify(es)},'es',this.closest('.coach'))">🔊 ${t('listen')} ES</button>`:''}<button class="btn sm ghost" onclick="stopSpeech()">⏹</button><button class="btn sm ghost" onclick="testAudio(this.closest('.coach'))">🎚 ${t('test_audio')}</button><span class="st">${t('audio_tip')}</span></div></div>`}
+  <div class="audio"><button class="btn sm gold" onclick="speakText(${Q(en)},'en',this.closest('.coach'))">🔊 ${t('listen')} EN</button>${es?`<button class="btn sm ghost" onclick="speakText(${Q(es)},'es',this.closest('.coach'))">🔊 ${t('listen')} ES</button>`:''}<button class="btn sm ghost" onclick="stopSpeech()">⏹</button><button class="btn sm ghost" onclick="testAudio(this.closest('.coach'))">🎚 ${t('test_audio')}</button><span class="st">${t('audio_tip')}</span></div></div>`}
 
 /* ================= DATA: run-ons ================= */
 /* t=text, s=index of first word of 2nd idea, f=accepted FANBOYS, sub=accepted front subordinators, drop=words to remove from 2nd clause start when using a joining word/subordinator, splice=true if comma splice */
@@ -618,7 +618,7 @@ function renderSeam(){const items=laneItems();const it=items[seamIdx%items.lengt
   const ws=words(it);
   document.getElementById('seam-box').innerHTML=`<span class="lanebadge ${it.l}">${LANES.find(l=>l[0]===it.l)[1]}</span>
   <div class="sent" id="seam-sent">${ws.map((w,i)=>`<button class="w tap" onclick="seamTap(${i})">${w}</button>`).join('')}</div>
-  <div class="row"><button class="btn ghost sm" onclick="speakText(${JSON.stringify(it.t)},'en')">🔊 ${t('listen')}</button><span class="sp"></span><button class="btn sm" id="seam-next" disabled onclick="seamIdx++;renderSeam()">${t('next')} →</button></div><div id="seam-fb"></div>`}
+  <div class="row"><button class="btn ghost sm" onclick="speakText(${Q(it.t)},'en')">🔊 ${t('listen')}</button><span class="sp"></span><button class="btn sm" id="seam-next" disabled onclick="seamIdx++;renderSeam()">${t('next')} →</button></div><div id="seam-fb"></div>`}
 function seamTap(i){if(seamDone)return;const items=laneItems();const it=items[seamIdx%items.length];seamDone=true;
   const btns=document.querySelectorAll('#seam-sent .w');btns.forEach((b,j)=>{b.classList.remove('tap');if(j<it.s)b.classList.add('c1');else b.classList.add('c2');if(j===it.s)b.classList.add('seam')});
   const ok=i===it.s;if(!ok)btns[i].classList.add('wrong');else btns[i].classList.add('right');
@@ -679,6 +679,7 @@ function runChecker(){const txt=document.getElementById('chk-in').value;const ou
   const msgEN=flagged||maybe?`${flagged} likely run-on${flagged!==1?'s':''} (red) · ${maybe} to double-check (yellow). Fix each one with a period, a comma + FANBOYS, a semicolon, or a subordinator, then check again.`:`No run-on patterns found. Read it aloud once more with the one-breath test.`;
   const msgES=flagged||maybe?`${flagged} probable${flagged!==1?'s':''} run-on (rojo) · ${maybe} para revisar (amarillo). Arregla cada uno y vuelve a revisar.`:`No se encontraron patrones de run-on. Léelo en voz alta una vez más.`;
   out.innerHTML=`<div class="checked" style="margin-top:10px">${html}</div><div class="fb ${flagged?'no':'ok'}">${bi(msgEN,msgES)}</div>`}
+function Q(v){return JSON.stringify(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 
 /* ================= GRAMMAR LAB ================= */
@@ -887,7 +888,7 @@ let miniIdx=0,miniT=null,miniLeft=600;
 function renderMini(){document.getElementById('mini-chips').innerHTML=MINI.map((m,i)=>`<button class="chip ${i===miniIdx?'on':''}" onclick="miniIdx=${i};renderMini()">${i+1}. ${LANG==='es'?m.es:m.en}</button>`).join('');
   const m=MINI[miniIdx];const part=(k,mins,lab)=>`<div class="script"><div class="t">${lab} · ${mins} min</div><div class="say">${LANG==='es'?m[k][1]:m[k][0]}</div>${LANG==='es'?`<div class="do">${m[k][0]}</div>`:''}</div>`;
   document.getElementById('mini-box').innerHTML=`<h3>${miniIdx+1}. ${LANG==='es'?m.es:m.en}</h3>${part('hook',1,'Hook')}${part('model',3,'Model')}${part('guided',3,'Guided')}${part('check',3,'Check')}
-  <div class="row"><span class="timer" id="mini-timer">10:00</span><button class="btn gold" onclick="miniRun()">⏱ ${t('run')}</button><button class="btn ghost" onclick="clearInterval(miniT);miniLeft=600;document.getElementById('mini-timer').textContent='10:00'">${t('stop')}</button><button class="btn ghost sm" onclick="speakText(${JSON.stringify([m.hook[0],m.model[0],m.guided[0],m.check[0]].join(' '))},'en',document.getElementById('coach-teacher'))">🔊 ${t('listen')}</button></div>`}
+  <div class="row"><span class="timer" id="mini-timer">10:00</span><button class="btn gold" onclick="miniRun()">⏱ ${t('run')}</button><button class="btn ghost" onclick="clearInterval(miniT);miniLeft=600;document.getElementById('mini-timer').textContent='10:00'">${t('stop')}</button><button class="btn ghost sm" onclick="speakText(${Q([m.hook[0],m.model[0],m.guided[0],m.check[0]].join(' '))},'en',document.getElementById('coach-teacher'))">🔊 ${t('listen')}</button></div>`}
 function miniRun(){clearInterval(miniT);miniLeft=600;miniT=setInterval(()=>{miniLeft--;const mm=String(Math.floor(miniLeft/60)).padStart(2,'0'),ss=String(miniLeft%60).padStart(2,'0');const el=document.getElementById('mini-timer');if(!el){clearInterval(miniT);return}el.textContent=`${mm}:${ss}`;el.classList.toggle('low',miniLeft<=60);if(miniLeft<=0){clearInterval(miniT);toast('⏱ Time')}},1000)}
 const MODELS=[
 {l3:'My school is big it has many students, the teachers are nice, I like my classes.',l4:'My school is big, and it has many students. The teachers are nice, so I like my classes.',r:'Level 3: ideas are clear but boundaries are lost (one fused seam, two splices). Level 4: every idea has a stop; two different joiners (and / so) show relationships.'},
